@@ -150,7 +150,11 @@ class SpotPriceBot(Plugin):
             f"Scheduling next poll in {announce_in} seconds (now: {now}, at: {announce_time})"
         )
         next_date = (announce_time + timedelta(days=1)).strftime("%Y-%m-%d")
-        self.sched.run_later(announce_in, self._poll(next_date))
+        self.sched.run_later(announce_in, self._scheduled_poll(next_date))
+
+    async def _scheduled_poll(self, date: str) -> None:
+        self._schedule_poll()
+        await self._do_poll(date)
 
     async def fetch_prices(self, date: str) -> list[tuple[datetime, float]]:
         fetch_url = nordpool_base_url.with_query(
@@ -183,7 +187,7 @@ class SpotPriceBot(Plugin):
         except Exception as e:
             raise Exception("Failed to parse prices") from e
 
-    async def _poll(self, date: str, attempts: int = 0) -> None:
+    async def _do_poll(self, date: str, attempts: int = 0) -> None:
         if attempts >= 24:
             self.log.error("Failed to fetch spot prices 24 times in a row, giving up")
             return
@@ -191,7 +195,7 @@ class SpotPriceBot(Plugin):
             data = await self.fetch_prices(date)
         except Exception:
             self.log.exception("Failed to fetch spot prices, retrying in 5 minutes")
-            self.sched.run_later(300, self._poll(date, attempts + 1))
+            self.sched.run_later(300, self._do_poll(date, attempts + 1))
             return
         formatted_prices = self._format_prices(data)
         for room_id in self.rooms:
