@@ -1,0 +1,7 @@
+delivery_area: FI
+currency: EUR
+timezone: Europe/Helsinki
+post_to_rooms: []
+day_names: [Maanantai, Tiistai, Keskiviikko, Torstai, Perjantai, Lauantai, Sunnuntai]
+command: tuntihinta
+vat: 0.255
