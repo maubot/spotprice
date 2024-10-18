@@ -200,8 +200,10 @@ class SpotPriceBot(Plugin):
     def _format_prices(self, data: list[tuple[datetime, float]]) -> str:
         lines = []
         lines.append(f"{self.day_names[data[12][0].weekday()]} {data[12][0].strftime("%Y-%m-%d")}")
+        lines.append("```")
         for ts, price in data:
-            lines.append(f"* {ts.astimezone(self.timezone).strftime("%H:%M")} {price:.2f} c/kWh")
+            lines.append(f"{ts.astimezone(self.timezone).strftime("%H:%M")} {price:.2f} c/kWh")
+        lines.append("```")
         return "\n".join(lines)
 
     @command.new(lambda self: self.command_name)
