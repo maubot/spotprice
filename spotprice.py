@@ -137,7 +137,8 @@ class SpotPriceBot(Plugin):
         now = datetime.now().astimezone(CET)
         # Hourly clearing prices are announced at 12:45 CET or later
         # https://www.nordpoolgroup.com/en/the-power-market/Day-ahead-market/
-        announce_time = now.replace(hour=12, minute=45, second=0, microsecond=0)
+        # Run the first check 5 minutes after that time
+        announce_time = now.replace(hour=12, minute=50, second=0, microsecond=0)
         if announce_time < now:
             announce_time += timedelta(days=1)
         return announce_time
