@@ -148,7 +148,17 @@ class SpotPriceBot(Plugin):
             return
         formatted_prices = self._format_prices(data)
         for room_id in self.rooms:
-            await self.client.send_markdown(room_id, formatted_prices)
+            await self.client.send_markdown(
+                room_id, formatted_prices, extra_content=self._format_data(data),
+            )
+
+    def _format_data(self, data: list[tuple[datetime, float]]):
+        return {
+            "bot.mau.spotprice": [
+                {"date": date.isoformat(), "cents": int(price * 100)}
+                for date, price in data
+            ]
+        }
 
     def _format_prices(self, data: list[tuple[datetime, float]]) -> str:
         lines = []
@@ -186,4 +196,4 @@ class SpotPriceBot(Plugin):
             self.log.exception("Failed to fetch spot prices")
             await evt.reply("Failed to fetch prices")
         else:
-            await evt.reply(self._format_prices(prices))
+            await evt.reply(self._format_prices(prices), extra_content=self._format_data(prices))
