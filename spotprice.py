@@ -13,10 +13,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from functools import partial
 from typing import Type
 from datetime import datetime, timedelta
-import math
 
 import pytz
 from yarl import URL
@@ -36,58 +34,8 @@ nordpool_headers = {
     "Sec-Fetch-Site": "same-site",
     "Origin": "https://data.nordpoolgroup.com",
     "Referer": "https://data.nordpoolgroup.com/",
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0",
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0",
 }
-# BLOCKS = ["▏", "▎", "▍", "▌", "▋", "▊", "▉", "█"]
-# RIGHT_BLOCKS = ["▕", "▕", "▕", "▐", "▐", "▐", "▐", "█"]
-# BAR_MAX_WIDTH = 16
-# BAR_MAX_RESOLUTION = BAR_MAX_WIDTH * len(BLOCKS)
-# LEFT_MAX_WIDTH = 4
-# LEFT_MAX_RESOLUTION = LEFT_MAX_WIDTH * len(BLOCKS)
-#
-# def make_bar_raw(size: int, left_pad: int) -> str:
-#     if size < left_pad:
-#         raise ValueError("Size must be greater than left_pad")
-#     left_pad_blocks = math.ceil(left_pad / len(BLOCKS))
-#     full_blocks = size // len(BLOCKS)
-#     block_count = full_blocks
-#     partial_block = size % len(BLOCKS)
-#     if partial_block:
-#         block_count += 1
-#         partial_block -= 1
-#     if size < 0:
-#         return (left_pad_blocks - block_count) * " " + (RIGHT_BLOCKS[partial_block] if partial_block else "") + RIGHT_BLOCKS[-1] * full_blocks
-#     else:
-#         return left_pad_blocks * " " + BLOCKS[-1] * full_blocks + (BLOCKS[partial_block] if partial_block else "")
-#
-# def make_bar(price: float, max_price: float, min_price: float) -> str:
-#     price_range = max_price - min_price
-#     if price_range == 0:
-#         price_range = 1
-#     left_pad_res = 0
-#     if min_price < 0:
-#         left_pad_res = -
-#     dynamic_max_res = BAR_MAX_RESOLUTION
-#     if price_range < 20 and max_price < 20:
-#         dynamic_max_width = BAR_MAX_WIDTH -
-#     normalized_price = (price - min_price) / price_range
-#
-#     num_blocks = int(normalized_price * dynamic_max_width * len(BLOCKS))
-#     full_blocks = num_blocks // len(BLOCKS)
-#     partial_block = num_blocks % len(BLOCKS)
-#
-#     # Create the bar
-#     bar = "█" * full_blocks
-#     if partial_block > 0:
-#         bar += BLOCKS[partial_block - 1]
-#
-#     # Handle negative prices
-#     if price < 0:
-#         bar = bar.rjust(BAR_WIDTH)
-#     else:
-#         bar = bar.ljust(BAR_WIDTH)
-#
-#     return bar
 
 
 class Config(BaseProxyConfig):
