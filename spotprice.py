@@ -154,8 +154,24 @@ class SpotPriceBot(Plugin):
         lines = []
         lines.append(f"{self.day_names[data[12][0].weekday()]} {data[12][0].strftime("%Y-%m-%d")}")
         lines.append("```")
-        for ts, price in data:
-            lines.append(f"{ts.astimezone(self.timezone).strftime("%H:%M")} {price:.2f} c/kWh")
+        if len(data) == 96:
+            maxlen = max(len(f"{price:.2f}") for _, price in data)
+            tblpad = " " * (maxlen - 3)
+            lines.append(f"     {tblpad}:00  {tblpad}:15  {tblpad}:30  {tblpad}:45")
+            lines.append("   ┌───────" + "─" * maxlen * 4)
+            for ts in range(0, 96, 4):
+                start_time = data[ts][0].astimezone(self.timezone).strftime("%H")
+                p1, p2, p3, p4 = data[ts][1], data[ts+1][1], data[ts+2][1], data[ts+3][1]
+                lines.append(
+                    f"{start_time} │"
+                    f" {p1:{maxlen}.2f} "
+                    f" {p2:{maxlen}.2f} "
+                    f" {p3:{maxlen}.2f} "
+                    f" {p4:{maxlen}.2f}"
+                )
+        else:
+            for ts, price in data:
+                lines.append(f"{ts.astimezone(self.timezone).strftime("%H:%M")} {price:.2f} c/kWh")
         lines.append("```")
         return "\n".join(lines)
 
