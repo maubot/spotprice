@@ -164,12 +164,12 @@ class SpotPriceBot(Plugin):
         lines = []
         lines.append(f"{self.day_names[data[12][0].weekday()]} {data[12][0].strftime("%Y-%m-%d")}")
         lines.append("```")
-        if len(data) == 96:
+        if len(data) in (92, 96, 100):
             maxlen = max(len(f"{price:.2f}") for _, price in data)
             tblpad = " " * (maxlen - 3)
             lines.append(f"     {tblpad}:00  {tblpad}:15  {tblpad}:30  {tblpad}:45")
             lines.append("   ┌───────" + "─" * maxlen * 4)
-            for ts in range(0, 96, 4):
+            for ts in range(0, len(data), 4):
                 start_time = data[ts][0].astimezone(self.timezone).strftime("%H")
                 p1, p2, p3, p4 = data[ts][1], data[ts+1][1], data[ts+2][1], data[ts+3][1]
                 lines.append(
