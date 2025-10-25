@@ -169,11 +169,19 @@ class SpotPriceBot(Plugin):
             tblpad = " " * (maxlen - 3)
             lines.append(f"     {tblpad}:00  {tblpad}:15  {tblpad}:30  {tblpad}:45")
             lines.append("   ┌───────" + "─" * maxlen * 4)
+            prev_hour = 0
             for ts in range(0, len(data), 4):
                 start_time = data[ts][0].astimezone(self.timezone).strftime("%H")
+                space = " "
+                new_hour = int(start_time)
+                if new_hour == prev_hour + 2:
+                    lines.append("{prev_hour + 1:02d}†│ hour skipped")
+                elif new_hour == prev_hour:
+                    space = "†"
+                prev_hour = new_hour
                 p1, p2, p3, p4 = data[ts][1], data[ts+1][1], data[ts+2][1], data[ts+3][1]
                 lines.append(
-                    f"{start_time} │"
+                    f"{start_time}{space}│"
                     f" {p1:{maxlen}.2f} "
                     f" {p2:{maxlen}.2f} "
                     f" {p3:{maxlen}.2f} "
