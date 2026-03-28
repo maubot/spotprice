@@ -175,7 +175,7 @@ class SpotPriceBot(Plugin):
                 space = " "
                 new_hour = int(start_time)
                 if new_hour == prev_hour + 2:
-                    lines.append("{prev_hour + 1:02d}†│ hour skipped")
+                    lines.append(f"{prev_hour + 1:02d}†│ hour skipped")
                 elif new_hour == prev_hour:
                     space = "†"
                 prev_hour = new_hour
